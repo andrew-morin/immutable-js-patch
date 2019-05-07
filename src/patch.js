@@ -81,23 +81,15 @@ var sequencePatch = function(sequence, firstPath, restPath, op, value) {
   }
 };
 
-var isRecord = function(any) {
-  return (
-    any != null
-    && typeof any.updateIn === 'function'
-    && typeof any.set === 'function'
-  )
-}
-
 var anyPatch = function(any, pathArray, op, value) {
   var firstPath, restPath;
 
-  if (Immutable.Iterable.isIndexed(any)) {
+  if (Immutable.isIndexed(any)) {
    if (pathArray.length === 0) { return any; }
    firstPath = pathArray[0];
    restPath = pathArray.slice(1);
    return sequencePatch(any, firstPath, restPath, op, value);
-  } else if (Immutable.Iterable.isKeyed(any) || isRecord(any)) {
+  } else if (Immutable.isKeyed(any) || Immutable.Record.isRecord(any)) {
     // if the object is a record or a keyed iterable immutable object
     if (pathArray.length === 0) { return any; }
     firstPath = pathArray[0];
